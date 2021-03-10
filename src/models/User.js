@@ -16,10 +16,6 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
     interests: [String],
-    connections: {
-      type: [String],
-      ref: "User",
-    },
     refreshToken: {
       type: String,
       unique: true,
@@ -34,12 +30,6 @@ const userSchema = new mongoose.Schema(
       },
     ],
     recommended: [
-      {
-        type: mongoose.Types.ObjectId,
-        ref: "Course",
-      },
-    ],
-    recommendations: [
       {
         type: mongoose.Types.ObjectId,
         ref: "Course",
