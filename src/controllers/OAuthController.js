@@ -6,6 +6,8 @@ const {
   HTTP400Error,
   HTTP403Error,
   HTTP401Error,
+  HTTPError,
+  HTTP500Error,
 } = require("../helpers/error");
 const { HTTP200Success, HTTP201Success } = require("../helpers/success");
 
@@ -32,7 +34,9 @@ class OAuthController {
       }
       return done(null, user, { status });
     } catch (error) {
-      done(error, undefined, undefined);
+      if (error instanceof HTTPError) return done(error, undefined, undefined);
+      //TODO: LOG OAUTH ERROR
+      done(new HTTP500Error(), undefined, undefined);
     }
   }
 
