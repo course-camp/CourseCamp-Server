@@ -25,7 +25,7 @@ module.exports = {
   updateUserInterests: Joi.object({
     interests: Joi.array().items(types.string).min(1).required(),
   }),
-  getUserById: Joi.string().custom(
+  validateObjectId: Joi.string().custom(
     validation.validObjectId,
     "MongoDB ObjectID validation."
   ),

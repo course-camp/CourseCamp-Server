@@ -14,10 +14,14 @@ router.get("/id/:userId", auth, UserController.getProfileById);
 
 router.get("/username/:username", auth, UserController.getProfileByUsername);
 
+router.post("/me/follow/:userId", auth, UserController.follow);
+
+router.delete("/me/unfollow/:userId", auth, UserController.unfollow);
+
 //TODO: Routes
-// router.post("/me/follow/:userId",auth);
-// router.delete("/me/unfollow/:userId",auth);
 // router.delete("/me",auth);
+// router.get("/me/following", auth);
+// router.get("/me/followers", auth);
 // router.post("/users/me/avatar",auth);
 // router.get("/users/me/avatar",auth);
 // router.delete("/users/me/avatar",auth);

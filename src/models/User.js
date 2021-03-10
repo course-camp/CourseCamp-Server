@@ -5,7 +5,10 @@ const userSchema = new mongoose.Schema(
     _id: mongoose.Types.ObjectId,
     username: {
       type: String,
-      unique: true,
+      index: {
+        partialFilterExpression: { username: { $type: "string" } },
+        unique: true,
+      },
     },
     displayName: {
       type: String,
@@ -49,17 +52,16 @@ userSchema.virtual("reviews", {
   foreignField: "userId",
 });
 
-//TODO: Implement followers and following for user model
-// userSchema.virtual("followers", {
-//   ref: "Follower",
-//   localField: "_id",
-//   foreignField: "followee",
-// });
+userSchema.virtual("followers", {
+  ref: "Follower",
+  localField: "_id",
+  foreignField: "followee",
+});
 
-// userSchema.virtual("following", {
-//   ref: "Follower",
-//   localField: "_id",
-//   foreignField: "follower",
-// });
+userSchema.virtual("following", {
+  ref: "Follower",
+  localField: "_id",
+  foreignField: "follower",
+});
 
 module.exports = mongoose.model("User", userSchema);
