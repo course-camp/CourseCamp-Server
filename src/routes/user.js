@@ -20,8 +20,11 @@ router.delete("/me/unfollow/:userId", auth, UserController.unfollow);
 
 //TODO: Routes
 // router.delete("/me",auth);
+// router.post("/logout",auth);
 // router.get("/me/following", auth);
 // router.get("/me/followers", auth);
+// router.get("/me/reviews",auth);
+// router.get("/me/courses",auth);
 // router.post("/users/me/avatar",auth);
 // router.get("/users/me/avatar",auth);
 // router.delete("/users/me/avatar",auth);
