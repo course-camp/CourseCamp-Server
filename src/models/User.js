@@ -59,4 +59,17 @@ userSchema.virtual("reviews", {
   foreignField: "userId",
 });
 
+//TODO: Implement followers and following for user model
+// userSchema.virtual("followers", {
+//   ref: "Follower",
+//   localField: "_id",
+//   foreignField: "followee",
+// });
+
+// userSchema.virtual("following", {
+//   ref: "Follower",
+//   localField: "_id",
+//   foreignField: "follower",
+// });
+
 module.exports = mongoose.model("User", userSchema);
