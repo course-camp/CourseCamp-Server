@@ -1,6 +1,6 @@
-const APPError = require("./APPError");
-const { statusCode, status } = require("../../config/error");
-class HTTP500Error extends APPError {
+const HTTPError = require("./HTTPError");
+const { statusCode, status } = require("../../config/httpContants");
+class HTTP500Error extends HTTPError {
   constructor(message) {
     super(
       message,

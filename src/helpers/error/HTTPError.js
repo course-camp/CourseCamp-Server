@@ -1,8 +1,8 @@
-class APPError extends Error {
+class HTTPError extends Error {
   constructor(message, statusCode, status, isOperational = true) {
     super();
     this.statusCode = statusCode;
-    this.name = "APIError";
+    this.name = "HTTPError";
     this.status = status;
     this.message = message;
     this.result = "FAILURE";
@@ -10,4 +10,4 @@ class APPError extends Error {
   }
 }
 
-module.exports = APPError;
+module.exports = HTTPError;

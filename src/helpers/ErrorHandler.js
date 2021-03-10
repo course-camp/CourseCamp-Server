@@ -1,4 +1,4 @@
-const { APPError, HTTP500Error } = require("./error");
+const { HTTPError, HTTP500Error } = require("./error");
 const mongoose = require("mongoose");
 class ErrorHandler {
   static handleError(err, res) {
@@ -6,7 +6,7 @@ class ErrorHandler {
       err = new HTTP500Error();
       delete err.message;
     }
-    if (err instanceof APPError && err.isOperational) {
+    if (err instanceof HTTPError && err.isOperational) {
       delete err.isOperational;
       delete err.name;
       delete err.stack;

@@ -1,6 +1,6 @@
-const APPError = require("./APPError");
-const { statusCode, status } = require("../../config/error");
-class HTTP401Error extends APPError {
+const HTTPError = require("./HTTPError");
+const { statusCode, status } = require("../../config/httpContants");
+class HTTP401Error extends HTTPError {
   constructor(message) {
     super(message, statusCode.UNAUTHORIZED, status.UNAUTHORIZED, true);
   }
