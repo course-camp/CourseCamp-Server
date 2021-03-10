@@ -44,11 +44,15 @@ class JWTService {
   }
   static verifyBearerToken(bearerToken) {
     try {
-      const token = bearerToken.replace("Bearer ", "");
-      if (token) {
-        return jwt.verify(token, accessSecret);
+      let token = null;
+      if (bearerToken) {
+        token = bearerToken.replace("Bearer ", "");
+        if (token) {
+          return jwt.verify(token, accessSecret);
+        }
+        throw new Error("Not valid bearer token.");
       }
-      throw new Error("Not valid bearer token.");
+      throw new Error("Bearer token not provided.");
     } catch (error) {
       throw new HTTP401Error(error.message);
     }
