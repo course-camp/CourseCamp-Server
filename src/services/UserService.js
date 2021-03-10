@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const User = require("../models/User");
 const JWTService = require("./JWTService");
-const { HTTP404Error } = require("../helpers/error");
+const { HTTP404Error, HTTP400Error } = require("../helpers/error");
 
 class UserService {
   static async findOrCreateUser({ displayName, emailId }) {
@@ -29,13 +29,47 @@ class UserService {
       throw error;
     }
   }
-  static async updateUserById(userId, updates) {
+  static async getUserByUsername(username) {
     try {
-      const user = await User.findById(userId);
+      const user = await User.findOne({ username });
+      if (user) return user;
+      throw new HTTP404Error("No user record found.");
+    } catch (error) {
+      throw error;
+    }
+  }
+  static async updateUserById(userId, updates, addToArray, userDoc) {
+    try {
+      const user = userDoc || (await User.findById(userId));
       if (user) {
-        Object.keys(updates).map((key) => {
-          user[key] = updates[key];
-        });
+        await Promise.all(
+          Object.keys(updates).map(async (key) => {
+            if (
+              [
+                "interests",
+                "publishedCourses",
+                "recommended",
+                "recommendations",
+              ].includes(key)
+            ) {
+              return updates[key].map((value) => {
+                const index = user[key].indexOf(value);
+                if (!(index >= 0) && addToArray) return user[key].push(value);
+                else if (index >= 0 && !addToArray)
+                  return user[key].splice(index, 1);
+              });
+            }
+            if (key === "username") {
+              const checkIfPresent = await User.findOne({
+                username: updates[key],
+              });
+              if (checkIfPresent) {
+                throw new HTTP400Error("Username already exists");
+              }
+            }
+            return (user[key] = updates[key]);
+          })
+        );
         return await user.save();
       }
       throw new HTTP404Error("No user record found.");
