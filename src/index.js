@@ -3,7 +3,6 @@ const passport = require("passport");
 const connect = require("./db/mongoose");
 const config = require("./config/config");
 const ErrorHandler = require("./helpers/ErrorHandler");
-const UserService = require("./services/UserService");
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
 require("./config/passport");
