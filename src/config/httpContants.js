@@ -1,4 +1,6 @@
 const statusCode = {
+  OK: 200,
+  CREATED: 201,
   BAD_REQUEST: 400,
   UNAUTHORIZED: 401,
   FORBIDDEN: 403,
@@ -7,6 +9,8 @@ const statusCode = {
 };
 
 const status = {
+  OK: "OK",
+  CREATED: "CREATED",
   BAD_REQUEST: "BAD_REQUEST",
   UNAUTHORIZED: "UNAUTHORIZED",
   FORBIDDEN: "FORBIDDEN",
