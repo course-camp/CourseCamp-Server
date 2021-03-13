@@ -18,17 +18,19 @@ router.post("/me/follow/:userId", auth, UserController.follow);
 
 router.delete("/me/unfollow/:userId", auth, UserController.unfollow);
 
+router.get("/me/following", auth, UserController.getFollowing);
+
+router.get("/me/followers", auth, UserController.getFollowers);
+
+router.get("/me/logout", auth, UserController.logout);
 //TODO: Routes
 // router.delete("/me",auth);
-// router.post("/logout",auth);
-// router.get("/me/following", auth);
-// router.get("/me/followers", auth);
 // router.get("/me/reviews",auth);
 // router.get("/me/courses",auth);
-// router.post("/users/me/avatar",auth);
-// router.get("/users/me/avatar",auth);
-// router.delete("/users/me/avatar",auth);
-// router.get("/users/username/:username/avatar", auth);
-// router.get("/users/id/:userId/avatar", auth);
+// router.post("/me/avatar",auth);
+// router.get("/me/avatar",auth);
+// router.delete("/me/avatar",auth);
+// router.get("/username/:username/avatar", auth);
+// router.get("/id/:userId/avatar", auth);
 
 module.exports = router;

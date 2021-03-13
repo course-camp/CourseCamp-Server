@@ -45,12 +45,7 @@ class UserService {
         await Promise.all(
           Object.keys(updates).map(async (key) => {
             if (
-              [
-                "interests",
-                "publishedCourses",
-                "recommended",
-                "recommendations",
-              ].includes(key)
+              ["interests", "publishedCourses", "recommended"].includes(key)
             ) {
               return updates[key].map((value) => {
                 const index = user[key].indexOf(value);
@@ -73,6 +68,37 @@ class UserService {
         return await user.save();
       }
       throw new HTTP404Error("No user record found.");
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getFollowing(user, options) {
+    try {
+      await user
+        .populate({ path: "following", options, select: "-_id -__v" })
+        .execPopulate();
+      return user.following;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getVirtualByPath(user, path, options) {
+    try {
+      await user
+        .populate({ path, options, select: "-_id -__v" })
+        .execPopulate();
+      return user[path];
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async userLogout(user) {
+    try {
+      user.refreshToken = null;
+      await user.save();
     } catch (error) {
       throw error;
     }

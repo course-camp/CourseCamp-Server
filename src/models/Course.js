@@ -9,6 +9,7 @@ const courseSchema = new mongoose.Schema(
     publisher: {
       type: mongoose.Types.ObjectId,
       ref: "User",
+      required: true,
     },
     courseURL: {
       type: String,
@@ -26,24 +27,24 @@ const courseSchema = new mongoose.Schema(
     },
     recommendCount: {
       type: Number,
-      default: 0,
+      default: 1,
     },
-    recommendedBy: [
-      {
-        type: mongoose.Types.ObjectId,
-        ref: "User",
-      },
-    ],
     isVerified: {
       type: Boolean,
       default: false,
     },
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 
 courseSchema.virtual("review", {
   ref: "Review",
+  localField: "_id",
+  foreignField: "courseId",
+});
+
+courseSchema.virtual("recommends", {
+  ref: "Recommend",
   localField: "_id",
   foreignField: "courseId",
 });
