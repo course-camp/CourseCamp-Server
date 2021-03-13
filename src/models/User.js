@@ -32,6 +32,12 @@ const userSchema = new mongoose.Schema(
         ref: "Course",
       },
     ],
+    recommended: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "Course",
+      },
+    ],
     isComplete: {
       type: Boolean,
       default: false,
@@ -61,12 +67,6 @@ userSchema.virtual("following", {
   ref: "Follower",
   localField: "_id",
   foreignField: "follower",
-});
-
-userSchema.virtual("recommends", {
-  ref: "Recommend",
-  localField: "_id",
-  foreignField: "userId",
 });
 
 module.exports = mongoose.model("User", userSchema);

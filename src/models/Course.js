@@ -29,6 +29,12 @@ const courseSchema = new mongoose.Schema(
       type: Number,
       default: 1,
     },
+    recommendedBy: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "User",
+      },
+    ],
     isVerified: {
       type: Boolean,
       default: false,
@@ -39,12 +45,6 @@ const courseSchema = new mongoose.Schema(
 
 courseSchema.virtual("review", {
   ref: "Review",
-  localField: "_id",
-  foreignField: "courseId",
-});
-
-courseSchema.virtual("recommends", {
-  ref: "Recommend",
   localField: "_id",
   foreignField: "courseId",
 });
