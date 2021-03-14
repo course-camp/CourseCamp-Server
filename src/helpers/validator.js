@@ -1,7 +1,7 @@
 const Joi = require("joi");
 const ObjectId = require("mongoose").Types.ObjectId;
 
-const validation = {
+const customValidation = {
   validObjectId: function (objectId, helpers) {
     if (
       objectId &&
@@ -21,13 +21,32 @@ const validation = {
 
 const types = {
   string: Joi.string().trim().min(3),
-  number: Joi.string().custom(
-    validation.validateNumber,
-    "Validate is given string number"
-  ),
+  number: Joi.number().min(0).positive(),
+  query: {
+    number: Joi.string().custom(
+      customValidation.validateNumber,
+      "Validate is given string number"
+    ),
+  },
 };
 
-module.exports = {
+const courseValidation = {
+  createCourse: Joi.object({
+    courseName: types.string.required(),
+    courseURL: types.string.uri().required(),
+    domain: types.string.min(2).required(),
+    price: types.number,
+    tags: Joi.array().items(types.string.min(1)).min(1),
+  }),
+  updateCourse: Joi.object({
+    courseName: types.string,
+    domain: types.string.min(2),
+    courseURL: types.string.uri(),
+    price: types.number,
+  }),
+};
+
+const userValidation = {
   updateUserProfile: Joi.object({
     username: types.string,
     displayName: types.string,
@@ -36,13 +55,33 @@ module.exports = {
   updateUserInterests: Joi.object({
     interests: Joi.array().items(types.string).min(1).required(),
   }),
+  getUserByUsername: types.string,
+};
+
+const reviewValidation = {
+  addAndUpdateReview: Joi.object({
+    review: types.string.max(300).required(),
+  }),
+};
+
+const paginationValidation = {
+  pagination: Joi.object({
+    limit: types.query.number,
+    skip: types.query.number,
+  }),
+};
+
+const objectIdValidation = {
   validateObjectId: Joi.string().custom(
-    validation.validObjectId,
+    customValidation.validObjectId,
     "MongoDB ObjectID validation."
   ),
-  getUserByUsername: types.string,
-  pagination: Joi.object({
-    limit: types.number,
-    skip: types.number,
-  }),
+};
+
+module.exports = {
+  ...courseValidation,
+  ...userValidation,
+  ...reviewValidation,
+  ...objectIdValidation,
+  ...paginationValidation,
 };

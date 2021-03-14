@@ -22,4 +22,6 @@ const reviewSchema = mongoose.Schema(
   }
 );
 
+reviewSchema.index({ courseId: 1, userId: 1 }, { unique: true });
+
 module.exports = mongoose.model("Review", reviewSchema);

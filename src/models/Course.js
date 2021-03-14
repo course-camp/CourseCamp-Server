@@ -13,6 +13,7 @@ const courseSchema = new mongoose.Schema(
     },
     courseURL: {
       type: String,
+      unique: true,
       required: true,
     },
     domain: {
@@ -43,7 +44,7 @@ const courseSchema = new mongoose.Schema(
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 
-courseSchema.virtual("review", {
+courseSchema.virtual("reviews", {
   ref: "Review",
   localField: "_id",
   foreignField: "courseId",

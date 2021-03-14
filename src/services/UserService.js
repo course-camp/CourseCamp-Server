@@ -41,24 +41,20 @@ class UserService {
   static async updateUserById(userId, updates, addToArray, userDoc) {
     try {
       const user = userDoc || (await User.findById(userId));
+      const arrayUpdates = ["interests", "publishedCourses", "recommended"];
       if (user) {
         await Promise.all(
           Object.keys(updates).map(async (key) => {
-            if (
-              ["interests", "publishedCourses", "recommended"].includes(key)
-            ) {
+            if (arrayUpdates.includes(key)) {
               return updates[key].map((value) => {
                 const index = user[key].indexOf(value);
-                if (!(index >= 0) && addToArray) return user[key].push(value);
+                if (index < 0 && addToArray) return user[key].push(value);
                 else if (index >= 0 && !addToArray)
                   return user[key].splice(index, 1);
               });
-            }
-            if (key === "username") {
-              const checkIfPresent = await User.findOne({
-                username: updates[key],
-              });
-              if (checkIfPresent) {
+            } else if (key === "username") {
+              const isPresent = await User.findOne({ username: updates[key] });
+              if (isPresent) {
                 throw new HTTP400Error("Username already exists");
               }
             }
