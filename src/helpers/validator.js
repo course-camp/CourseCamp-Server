@@ -64,13 +64,6 @@ const reviewValidation = {
   }),
 };
 
-const paginationValidation = {
-  pagination: Joi.object({
-    limit: types.query.number,
-    skip: types.query.number,
-  }),
-};
-
 const objectIdValidation = {
   validateObjectId: Joi.string().custom(
     customValidation.validObjectId,
@@ -79,9 +72,9 @@ const objectIdValidation = {
 };
 
 module.exports = {
+  types,
   ...courseValidation,
   ...userValidation,
   ...reviewValidation,
   ...objectIdValidation,
-  ...paginationValidation,
 };
