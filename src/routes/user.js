@@ -6,9 +6,7 @@ router.get("/me", auth, UserController.getProfile);
 
 router.patch("/me", auth, UserController.updateProfile);
 
-router.patch("/me/interests", auth, UserController.updateInterests);
-
-router.delete("/me/interests", auth, UserController.deleteInterests);
+router.get("/me/logout", auth, UserController.logout);
 
 router.get("/id/:userId", auth, UserController.getProfileById);
 
@@ -22,11 +20,15 @@ router.get("/me/following", auth, UserController.getFollowing);
 
 router.get("/me/followers", auth, UserController.getFollowers);
 
-router.get("/me/logout", auth, UserController.logout);
+router.patch("/me/interests", auth, UserController.updateInterests);
+
+router.delete("/me/interests", auth, UserController.deleteInterests);
+
+router.get("/me/reviews", auth, UserController.getReviews);
+
+router.get("/me/courses", auth, UserController.getPublishedCourses);
 //TODO: Routes
 // router.delete("/me",auth);
-// router.get("/me/reviews",auth);
-// router.get("/me/courses",auth);
 // router.post("/me/avatar",auth);
 // router.get("/me/avatar",auth);
 // router.delete("/me/avatar",auth);

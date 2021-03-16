@@ -10,6 +10,4 @@ router.patch("/:reviewId", auth, ReviewController.updateReviewById);
 
 router.delete("/:reviewId", auth, ReviewController.deleteReviewById);
 
-// TODO: routes
-
 module.exports = router;
