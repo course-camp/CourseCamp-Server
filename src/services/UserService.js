@@ -41,7 +41,7 @@ class UserService {
   static async updateUserById(userId, updates, addToArray, userDoc) {
     try {
       const user = userDoc || (await User.findById(userId));
-      const arrayUpdates = ["interests", "publishedCourses", "recommended"];
+      const arrayUpdates = ["interests", "recommended"];
       if (user) {
         await Promise.all(
           Object.keys(updates).map(async (key) => {
@@ -69,22 +69,10 @@ class UserService {
     }
   }
 
-  static async getFollowing(user, options) {
+  static async getVirtualByPath(user, path, options, select) {
     try {
-      await user
-        .populate({ path: "following", options, select: "-_id -__v" })
-        .execPopulate();
-      return user.following;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  static async getVirtualByPath(user, path, options) {
-    try {
-      await user
-        .populate({ path, options, select: "-_id -__v" })
-        .execPopulate();
+      select = select ? select : "-_id -__v";
+      await user.populate({ path, options, select }).execPopulate();
       return user[path];
     } catch (error) {
       throw error;
