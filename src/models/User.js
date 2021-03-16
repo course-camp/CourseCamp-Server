@@ -26,12 +26,6 @@ const userSchema = new mongoose.Schema(
     summary: {
       type: String,
     },
-    publishedCourses: [
-      {
-        type: mongoose.Types.ObjectId,
-        ref: "Course",
-      },
-    ],
     recommended: [
       {
         type: mongoose.Types.ObjectId,
@@ -50,6 +44,12 @@ const userSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
+
+userSchema.virtual("publishedCourses", {
+  ref: "Course",
+  localField: "_id",
+  foreignField: "publisher",
+});
 
 userSchema.virtual("reviews", {
   ref: "Review",
