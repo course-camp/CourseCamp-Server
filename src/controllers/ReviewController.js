@@ -2,6 +2,7 @@ const ReviewService = require("../services/ReviewService");
 const validator = require("../helpers/validator");
 const { HTTP400Error } = require("../helpers/error");
 const { HTTP201Success, HTTP200Success } = require("../helpers/success");
+const CourseService = require("../services/CourseService");
 
 class ReviewController {
   static async getReviewById(req, res, next) {
@@ -29,9 +30,10 @@ class ReviewController {
       } = req;
       let validate = validator.validateObjectId.validate(courseId);
       if (!validate.error) {
+        const course = await CourseService.getCourseById(courseId);
         validate = validator.addAndUpdateReview.validate(review);
         if (!validate.error) {
-          (review["courseId"] = courseId), (review["userId"] = user._id);
+          (review["courseId"] = course._id), (review["userId"] = user._id);
           const newReview = await ReviewService.addReview(review);
           return new HTTP201Success("Review Added.", {
             review: newReview,
