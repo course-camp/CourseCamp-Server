@@ -1,5 +1,6 @@
 const UserService = require("../services/UserService");
 const FollowerService = require("../services/FollowerService");
+const { validateRequestQuery } = require("../helpers/validateRequestQuery");
 const validator = require("../helpers/validator");
 const { HTTP200Success, HTTP204Success } = require("../helpers/success");
 const { HTTP400Error, HTTP422Error } = require("../helpers/error");
@@ -136,7 +137,8 @@ class UserController {
   static async getFollowing(req, res, next) {
     try {
       const user = req.user;
-      const options = await UserController.validatePagination(req.query);
+      const allowedSorts = ["createdAt", "updatedAt"];
+      const options = await validateRequestQuery(req.query, allowedSorts);
       const following = await UserService.getVirtualByPath(
         user,
         "following",
@@ -151,13 +153,49 @@ class UserController {
   static async getFollowers(req, res, next) {
     try {
       const user = req.user;
-      const options = await UserController.validatePagination(req.query);
+      const allowedSorts = ["createdAt", "updatedAt"];
+      const options = await validateRequestQuery(req.query, allowedSorts);
       const followers = await UserService.getVirtualByPath(
         user,
         "followers",
         options
       );
       new HTTP200Success("User followers.", { followers }).sendResponse(res);
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async getReviews(req, res, next) {
+    try {
+      const user = req.user;
+      const allowedSorts = ["createdAt", "updatedAt"];
+      const options = await validateRequestQuery(req.query, allowedSorts);
+      const reviews = await UserService.getVirtualByPath(
+        user,
+        "reviews",
+        options,
+        "-__v"
+      );
+      new HTTP200Success("User Reviews.", { reviews }).sendResponse(res);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getPublishedCourses(req, res, next) {
+    try {
+      const user = req.user;
+      const allowedSorts = ["createdAt", "updatedAt", "recommendCount"];
+      const options = await validateRequestQuery(req.query, allowedSorts);
+      const courses = await UserService.getVirtualByPath(
+        user,
+        "publishedCourses",
+        options,
+        "-__v -recommendedBy"
+      );
+      new HTTP200Success("User published courses.", { courses }).sendResponse(
+        res
+      );
     } catch (error) {
       next(error);
     }
@@ -171,25 +209,6 @@ class UserController {
     } catch (error) {
       next(error);
     }
-  }
-
-  static async validatePagination(query) {
-    let validate = {};
-    const options = { limit: 10, skip: 0, sort: "createdAt" };
-    if (query.limit !== undefined || query.skip !== undefined) {
-      validate = validator.pagination.validate(query);
-      if (!validate.error) {
-        Object.keys(options).map((value) => {
-          options[value] =
-            validate.value[value] !== undefined
-              ? validate.value[value]
-              : options[value];
-        });
-        return options;
-      }
-      throw new HTTP422Error("Invalid query parameters.");
-    }
-    return options;
   }
 }
 
