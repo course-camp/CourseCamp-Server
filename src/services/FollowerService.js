@@ -1,4 +1,4 @@
-const { HTTP400Error } = require("../helpers/error");
+const { HTTP400Error, HTTP409Error } = require("../helpers/error");
 const Follower = require("../models/Follower");
 const UserService = require("./UserService");
 
@@ -14,7 +14,7 @@ class FollowerService {
           });
           return await followerDoc.save();
         }
-        throw new HTTP400Error("Followee has been already followed.");
+        throw new HTTP409Error("Followee has been already followed.");
       }
       throw new HTTP400Error("Followee cannot be same as follower");
     } catch (error) {
