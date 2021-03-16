@@ -25,6 +25,18 @@ class CourseService {
     }
   }
 
+  static async getAllCourses(queryOpts) {
+    try {
+      const { limit, skip, sort } = queryOpts;
+      return await Course.find({}, { recommendedBy: 0, __v: 0 })
+        .limit(limit)
+        .skip(skip)
+        .sort(sort);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async deleteCourseById(courseId) {
     try {
       const course = await Course.findById(courseId);
@@ -67,7 +79,15 @@ class CourseService {
       throw error;
     }
   }
-
+  static async getVirtualByPath(course, path, options, select) {
+    try {
+      await course.populate({ path, options, select }).execPopulate();
+      return course["reviews"];
+    } catch (error) {
+      throw error;
+    }
+  }
+  // TODO: recommends
   static async updateCourseRecommends(courseId) {}
 }
 module.exports = CourseService;
