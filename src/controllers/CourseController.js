@@ -1,11 +1,20 @@
 const CourseService = require("../services/CourseService");
 const validator = require("../helpers/validator");
+const { validateRequestQuery } = require("../helpers/validateRequestQuery");
 const { HTTP400Error } = require("../helpers/error");
 const { HTTP200Success, HTTP201Success } = require("../helpers/success");
 
 class CourseController {
-  // TODO: pagination
-  static async getAllCourses(req, res, next) {}
+  static async getAllCourses(req, res, next) {
+    try {
+      const allowedSorts = ["createdAt", "updatedAt", "recommendCount"];
+      const options = await validateRequestQuery(req.query, allowedSorts);
+      const courses = await CourseService.getAllCourses(options);
+      return new HTTP200Success("Courses.", { courses }).sendResponse(res);
+    } catch (error) {
+      next(error);
+    }
+  }
 
   static async getCourseById(req, res, next) {
     try {
@@ -82,6 +91,33 @@ class CourseController {
         throw new HTTP400Error("Invalid course updates.");
       }
       throw new HTTP400Error("Invalid courseId.");
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getCourseReviews(req, res, next) {
+    try {
+      const {
+        params: { courseId },
+      } = req;
+      const validate = validator.validateObjectId.validate(courseId);
+      if (!validate.error) {
+        const allowedSorts = ["createdAt", "updatedAt"];
+        const options = await validateRequestQuery(req.query, allowedSorts);
+        const course = await CourseService.getCourseById(courseId);
+        const reviews = await CourseService.getVirtualByPath(
+          course,
+          "reviews",
+          options,
+          "-__v"
+        );
+        return new HTTP200Success("Course reviews.", { reviews }).sendResponse(
+          res
+        );
+      }
+      throw new HTTP400Error("Invalid courseId.");
+      // new HTTP200Success("Course reviews.", { courses }).sendResponse(res);
     } catch (error) {
       next(error);
     }
