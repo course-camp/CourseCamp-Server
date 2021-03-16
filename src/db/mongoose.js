@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
-const config = require("../config/config");
+const db = require("../config/config").db;
 
 function connect() {
   mongoose
-    .connect(config.db.mongodb_uri, {
+    .connect(db.mongodb_uri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
