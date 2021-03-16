@@ -82,7 +82,7 @@ class CourseService {
   static async getVirtualByPath(course, path, options, select) {
     try {
       await course.populate({ path, options, select }).execPopulate();
-      return course["reviews"];
+      return course[path];
     } catch (error) {
       throw error;
     }
