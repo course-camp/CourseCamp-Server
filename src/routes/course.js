@@ -14,8 +14,14 @@ router.delete("/:courseId", auth, CourseController.deleteCourseById);
 
 router.get("/:courseId/reviews", auth, CourseController.getCourseReviews);
 
-// TODO: routes
-// router.post("/:courseId/recommend", auth);
-// router.get("/:courseId/recommends", auth);
+router.post("/:courseId/recommend", auth, CourseController.addRecommendation);
+
+router.delete(
+  "/:courseId/unrecommend",
+  auth,
+  CourseController.deleteRecommendation
+);
+
+router.get("/:courseId/recommends", auth, CourseController.getRecommendedBy);
 
 module.exports = router;
