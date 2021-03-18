@@ -17,6 +17,7 @@ const getRecommendedByPipeline = async function (
               recommends: {
                 $push: { $toString: "$userId" },
               },
+              count: { $sum: 1 },
             },
           },
         ],
@@ -37,9 +38,9 @@ const getRecommendedByPipeline = async function (
             $group: {
               _id: { followed: "$followed.follower" },
               followers: {
-                $push: "$followed.followee",
                 $push: { $toString: "$followed.followee" },
               },
+              count: { $sum: 1 },
             },
           },
         ],
@@ -54,15 +55,9 @@ const getRecommendedByPipeline = async function (
     },
     {
       $addFields: {
-        common: { $setIntersection: ["$set1.recommends", "$set2.followers"] },
-        difference: { $setDifference: ["$set1.recommends", "$set2.followers"] },
+        totalRecommendCount: "$set1.count",
+        followedRecommendCount: "$set2.count",
         recommendedBy: {
-          $concatArrays: [
-            { $setIntersection: ["$set1.recommends", "$set2.followers"] },
-            { $setDifference: ["$set1.recommends", "$set2.followers"] },
-          ],
-        },
-        slice: {
           $slice: [
             {
               $concatArrays: [
@@ -74,6 +69,14 @@ const getRecommendedByPipeline = async function (
             limit,
           ],
         },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        recommendedBy: 1,
+        totalRecommendCount: 1,
+        followedRecommendCount: 1,
       },
     },
   ];
