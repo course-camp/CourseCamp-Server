@@ -51,5 +51,13 @@ class ReviewService {
       throw error;
     }
   }
+
+  static async deleteReviewToCourse(courseId) {
+    try {
+      return await Review.deleteMany({ courseId });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 module.exports = ReviewService;
