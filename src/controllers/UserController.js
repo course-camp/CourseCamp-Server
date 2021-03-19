@@ -191,7 +191,7 @@ class UserController {
         user,
         "publishedCourses",
         options,
-        "-__v -recommendedBy"
+        "-__v"
       );
       new HTTP200Success("User published courses.", { courses }).sendResponse(
         res

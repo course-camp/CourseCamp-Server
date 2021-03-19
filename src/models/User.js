@@ -26,12 +26,6 @@ const userSchema = new mongoose.Schema(
     summary: {
       type: String,
     },
-    recommended: [
-      {
-        type: mongoose.Types.ObjectId,
-        ref: "Course",
-      },
-    ],
     isComplete: {
       type: Boolean,
       default: false,
@@ -49,6 +43,12 @@ userSchema.virtual("publishedCourses", {
   ref: "Course",
   localField: "_id",
   foreignField: "publisher",
+});
+
+userSchema.virtual("recommends", {
+  ref: "Recommend",
+  localField: "_id",
+  foreignField: "userId",
 });
 
 userSchema.virtual("reviews", {
