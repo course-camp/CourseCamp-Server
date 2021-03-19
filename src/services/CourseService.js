@@ -51,9 +51,9 @@ class CourseService {
     }
   }
 
-  static async updateCourseById(courseId, updates, addToArray) {
+  static async updateCourseById(courseId, updates, addToArray, courseDoc) {
     try {
-      const course = await Course.findById(courseId);
+      const course = courseDoc || (await Course.findById(courseId));
       const arrayUpdates = ["tags"];
       if (course) {
         if (course.isVerified)
@@ -87,7 +87,18 @@ class CourseService {
       throw error;
     }
   }
-  // TODO: recommends
-  static async updateCourseRecommends(courseId) {}
+
+  static async updateCourseRecommendCount(courseId, inc, courseDoc) {
+    try {
+      const course = courseDoc || (await Course.findById(courseId));
+      if (course) {
+        course["recommendCount"] += inc ? +1 : -1;
+        return await course.save();
+      }
+      throw new HTTP404Error("Course not found.");
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 module.exports = CourseService;
