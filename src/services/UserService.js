@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const User = require("../models/User");
 const JWTService = require("./JWTService");
+const { getFollowers, getFollowing } = require("../db/aggregation").followers;
 const { HTTP404Error, HTTP400Error } = require("../helpers/error");
 
 class UserService {
@@ -83,6 +84,30 @@ class UserService {
     try {
       user.refreshToken = null;
       await user.save();
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getFollowing(userId, options) {
+    try {
+      const { limit, skip, sort } = options;
+      const following = await User.aggregate(
+        await getFollowing(userId, limit, skip, sort)
+      ).exec();
+      return following;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getFollowers(userId, options) {
+    try {
+      const { limit, skip, sort } = options;
+      const followers = await User.aggregate(
+        await getFollowers(userId, limit, skip, sort)
+      ).exec();
+      return followers;
     } catch (error) {
       throw error;
     }

@@ -1,6 +1,6 @@
 const { HTTP409Error, HTTP400Error } = require("../helpers/error");
 const Recommend = require("../models/Recommend");
-const getRecommendedByPipeline = require("../db/aggregation/recommendedByPipeline");
+const getRecommendedByPipeline = require("../db/aggregation/recommend/getRecommendedBy");
 
 class RecommendService {
   static async addRecommendation(courseId, userId) {

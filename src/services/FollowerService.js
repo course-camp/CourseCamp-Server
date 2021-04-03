@@ -1,7 +1,6 @@
 const { HTTP400Error, HTTP409Error } = require("../helpers/error");
 const Follower = require("../models/Follower");
 const UserService = require("./UserService");
-
 class FollowerService {
   static async addFollower(followee, follower) {
     try {

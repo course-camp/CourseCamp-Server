@@ -133,33 +133,23 @@ class UserController {
       next(error);
     }
   }
-  // TODO: remove followers from each Follower document in following array
   static async getFollowing(req, res, next) {
     try {
       const user = req.user;
       const allowedSorts = ["createdAt", "updatedAt"];
       const options = await validateRequestQuery(req.query, allowedSorts);
-      const following = await UserService.getVirtualByPath(
-        user,
-        "following",
-        options
-      );
+      const following = await UserService.getFollowing(user._id, options);
       new HTTP200Success("Users followed.", { following }).sendResponse(res);
     } catch (error) {
       next(error);
     }
   }
-  // TODO: remove followee from each Follower document in following array
   static async getFollowers(req, res, next) {
     try {
       const user = req.user;
       const allowedSorts = ["createdAt", "updatedAt"];
       const options = await validateRequestQuery(req.query, allowedSorts);
-      const followers = await UserService.getVirtualByPath(
-        user,
-        "followers",
-        options
-      );
+      const followers = await UserService.getFollowers(user._id, options);
       new HTTP200Success("User followers.", { followers }).sendResponse(res);
     } catch (error) {
       next(error);
