@@ -1,6 +1,6 @@
 const path = require("path");
 require("dotenv").config({
-  path: path.join(__dirname, "../../", ".env.production"),
+  path: path.join(__dirname, "../../", ".env.production").toString(),
 });
 
 console.log("PORT: " + process.env.PORT);
