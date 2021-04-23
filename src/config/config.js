@@ -3,8 +3,6 @@ require("dotenv").config({
   path: path.join(__dirname, "../../", ".env.production").toString(),
 });
 
-console.log("PORT: " + process.env.PORT);
-console.log("callbackURL: " + process.env.GOOGLE_CALLBACK_URL);
 const config = {
   server: {
     port: process.env.PORT,
