@@ -1,6 +1,8 @@
+const path = require("path");
 require("dotenv").config({
-  path: "/home/sudhir/Desktop/Project/Coursecamp-Server/.env.production",
+  path: path.join(__dirname, "../../", ".env.production"),
 });
+
 console.log("PORT: " + process.env.PORT);
 console.log("callbackURL: " + process.env.GOOGLE_CALLBACK_URL);
 const config = {
