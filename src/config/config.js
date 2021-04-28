@@ -1,7 +1,4 @@
-const path = require("path");
-require("dotenv").config({
-  path: path.join(__dirname, "../../", ".env.production").toString(),
-});
+require("dotenv").config();
 
 const config = {
   server: {
@@ -15,6 +12,12 @@ const config = {
     accessSecret: process.env.JWT_ACCESS_TOKEN_SECRET,
     accessTokenLife: process.env.JWT_ACCESS_TOKEN_EXPRIN,
     refreshTokenLife: process.env.JWT_REFRESH_TOKEN_EXPRIN,
+  },
+  fileServer: {
+    baseURL: process.env.FILE_SERVER_BASE_URL,
+    uploadRoute: process.env.FILE_SERVER_UPLOAD_ROUTE,
+    publicRoute: process.env.FILE_SERVER_PUBLIC_ROUTE,
+    deleteRoute: process.env.FILE_SERVER_DELETE_ROUTE,
   },
   OAuth: {
     google: {
