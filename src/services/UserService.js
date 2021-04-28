@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const User = require("../models/User");
 const JWTService = require("./JWTService");
+const AxiosService = require("./AxiosService");
 const { getFollowers, getFollowing } = require("../db/aggregation").followers;
 const { HTTP404Error, HTTP400Error } = require("../helpers/error");
 
@@ -108,6 +109,18 @@ class UserService {
         await getFollowers(userId, limit, skip, sort)
       ).exec();
       return followers;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async removeAvatarIfExists(userId, userDoc) {
+    try {
+      const user = userDoc || User.findById(userId);
+      if (user.avatar) {
+        await AxiosService.deleteFile(user.avatar);
+        return await User.updateOne({ _id: userId }, { $unset: { avatar: 1 } });
+      }
     } catch (error) {
       throw error;
     }

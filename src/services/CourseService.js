@@ -1,5 +1,6 @@
 const { HTTP409Error, HTTP404Error } = require("../helpers/error");
 const Course = require("../models/Course");
+const AxiosService = require("../services/AxiosService");
 
 class CourseService {
   static async addCourse(course) {
@@ -96,6 +97,21 @@ class CourseService {
         return await course.save();
       }
       throw new HTTP404Error("Course not found.");
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async removeImageIfExists(courseId, courseDoc) {
+    try {
+      const course = courseDoc || (await CourseService.getCourseById(courseId));
+      if (course.courseImage) {
+        await AxiosService.deleteFile(course.courseImage);
+        return await Course.updateOne(
+          { _id: courseId },
+          { $unset: { courseImage: 1 } }
+        );
+      }
     } catch (error) {
       throw error;
     }

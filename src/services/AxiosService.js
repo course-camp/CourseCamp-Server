@@ -1,0 +1,34 @@
+const axios = require("axios").default;
+const { fileServer } = require("../config/config");
+const { HTTP500Error } = require("../helpers/error");
+
+class AxiosService {
+  static async deleteFile(path) {
+    try {
+      const { data, status } = await axios.delete(
+        `${fileServer.deleteRoute}/${path}`
+      );
+      if (status === 200) return data;
+      throw new Error(data.message);
+    } catch (error) {
+      throw new HTTP500Error(error.message);
+    }
+  }
+
+  static async postFile(form) {
+    try {
+      const { data, status } = await axios({
+        method: "POST",
+        url: fileServer.uploadRoute,
+        data: form,
+        headers: form.getHeaders(),
+      });
+      if (status === 200) return data;
+      throw new Error("File not uploaded.");
+    } catch (error) {
+      throw new HTTP500Error(error.message);
+    }
+  }
+}
+
+module.exports = AxiosService;
