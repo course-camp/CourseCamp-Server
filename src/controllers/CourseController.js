@@ -193,5 +193,39 @@ class CourseController {
       next(error);
     }
   }
+
+  static async uploadCourseImage(req, res, next) {
+    try {
+      const { course, data } = req;
+      if (!data) throw new HTTP400Error("File not provided.");
+      await CourseService.updateCourseById(
+        course._id,
+        {
+          courseImage: data.filename,
+        },
+        false,
+        course
+      );
+      return new HTTP200Success("File uploaded", {
+        path: data.filename,
+      }).sendResponse(res);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async deleteCourseImage(req, res, next) {
+    try {
+      const { course } = req;
+      const result = await CourseService.removeImageIfExists(
+        course._id,
+        course
+      );
+      if (result) return new HTTP200Success("File deleted.").sendResponse(res);
+      throw new HTTP400Error("Course image not present");
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 module.exports = CourseController;

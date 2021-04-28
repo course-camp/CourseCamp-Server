@@ -1,9 +1,11 @@
 const UserService = require("../services/UserService");
 const FollowerService = require("../services/FollowerService");
+const { fileServer } = require("../config/config");
 const { validateRequestQuery } = require("../helpers/validateRequestQuery");
 const validator = require("../helpers/validator");
+const { deleteFile } = require("../services/MulterService");
 const { HTTP200Success, HTTP204Success } = require("../helpers/success");
-const { HTTP400Error, HTTP422Error } = require("../helpers/error");
+const { HTTP400Error } = require("../helpers/error");
 
 class UserController {
   static getProfile(req, res, next) {
@@ -196,6 +198,36 @@ class UserController {
       const user = req.user;
       await UserService.userLogout(user);
       new HTTP200Success("User logged out.").sendResponse(res);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async uploadUserAvatar(req, res, next) {
+    try {
+      const { user, data } = req;
+      if (!data) throw new HTTP400Error("User avatar not provided.");
+      await UserService.updateUserById(
+        user._id,
+        { avatar: data.filename },
+        false,
+        user
+      );
+      return new HTTP200Success("Image uploaded.", {
+        path: fileServer.publicRoute + "/userImages/" + req.data.filename,
+      }).sendResponse(res);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async deleteUserAvatar(req, res, next) {
+    try {
+      const { user } = req;
+      const result = await UserService.removeAvatarIfExists(user._id, user);
+      if (result)
+        return new HTTP200Success("Avatar deleted.").sendResponse(res);
+      throw new HTTP400Error("User avatar not present");
     } catch (error) {
       next(error);
     }
