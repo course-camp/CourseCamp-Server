@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const CourseController = require("../controllers/CourseController");
 const auth = require("../middlewares/auth");
+const courseExists = require("../middlewares/course");
+const { upload } = require("../services/MulterService");
 
 router.get("/", auth, CourseController.getAllCourses);
 
@@ -23,5 +25,20 @@ router.delete(
 );
 
 router.get("/:courseId/recommends", auth, CourseController.getRecommendedBy);
+
+router.post(
+  "/:courseId/image",
+  auth,
+  courseExists,
+  upload,
+  CourseController.uploadCourseImage
+);
+
+router.delete(
+  "/:courseId/image",
+  auth,
+  courseExists,
+  CourseController.deleteCourseImage
+);
 
 module.exports = router;

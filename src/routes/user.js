@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const UserController = require("../controllers/UserController");
 const auth = require("../middlewares/auth");
+const { upload } = require("../services/MulterService");
 
 router.get("/me", auth, UserController.getProfile);
 
@@ -27,12 +28,11 @@ router.delete("/me/interests", auth, UserController.deleteInterests);
 router.get("/me/reviews", auth, UserController.getReviews);
 
 router.get("/me/courses", auth, UserController.getPublishedCourses);
+
+router.post("/me/avatar", auth, upload, UserController.uploadUserAvatar);
+
+router.delete("/me/avatar", auth, UserController.deleteUserAvatar);
 //TODO: Routes
 // router.delete("/me",auth);
-// router.post("/me/avatar",auth);
-// router.get("/me/avatar",auth);
-// router.delete("/me/avatar",auth);
-// router.get("/username/:username/avatar", auth);
-// router.get("/id/:userId/avatar", auth);
 
 module.exports = router;
