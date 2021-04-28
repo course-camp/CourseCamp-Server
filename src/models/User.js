@@ -14,6 +14,9 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "Anonymous",
     },
+    avatar: {
+      type: String,
+    },
     emailId: {
       type: String,
       required: true,

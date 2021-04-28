@@ -16,6 +16,9 @@ const courseSchema = new mongoose.Schema(
       unique: true,
       required: true,
     },
+    courseImage: {
+      type: String,
+    },
     domain: {
       type: String,
       required: true,
