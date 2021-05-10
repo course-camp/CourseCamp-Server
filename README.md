@@ -1,2 +1,0 @@
-# CourseCamp-Server
-CourseCamp Server

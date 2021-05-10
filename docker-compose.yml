@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  dev:
+    image: node:14.15.4
+    working_dir: /usr/src/service
+    volumes:
+      - .:/usr/src/service
+    command: npm run dev
+    labels:
+      - "com.coursecamp.description=development"
+      - "com.coursecamp.comtainer=node"
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo
+    ports:
+      - 27017:27017
+    labels:
+      - "com.coursecamp.description=development"
+      - "com.coursecamp.comtainer=mongo"
+    volumes:
+      - mongodatabase:/data/db
+volumes:
+  nodemodules:
+    external: "true"
+  mongodatabase:
+    external: "true"
