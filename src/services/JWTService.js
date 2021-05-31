@@ -1,11 +1,7 @@
 const jwt = require("jsonwebtoken");
 const ObjectId = require("mongoose").Types.ObjectId;
-const {
-  accessSecret,
-  refreshSecret,
-  accessTokenLife,
-  refreshTokenLife,
-} = require("../config/config").jwt;
+const { accessSecret, refreshSecret, accessTokenLife, refreshTokenLife } =
+  require("../config/config").jwt;
 const { HTTP401Error, HTTP500Error } = require("../helpers/error");
 class JWTService {
   static isValidPayload(payload) {
@@ -37,7 +33,7 @@ class JWTService {
           expiresIn: refreshTokenLife,
         });
       }
-      throw new APPError("Not valid payload.");
+      throw new Error("Not valid payload.");
     } catch (error) {
       throw new HTTP500Error(error.message);
     }
