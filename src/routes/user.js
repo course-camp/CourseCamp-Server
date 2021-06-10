@@ -3,6 +3,8 @@ const UserController = require("../controllers/UserController");
 const auth = require("../middlewares/auth");
 const { upload } = require("../services/MulterService");
 
+router.post("/add", UserController.addUser);
+
 router.get("/me", auth, UserController.getProfile);
 
 router.patch("/me", auth, UserController.updateProfile);

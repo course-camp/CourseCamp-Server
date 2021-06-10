@@ -47,6 +47,9 @@ const courseValidation = {
 };
 
 const userValidation = {
+  addUser: Joi.object({
+    access_token: types.string.required(),
+  }),
   updateUserProfile: Joi.object({
     username: types.string,
     displayName: types.string,

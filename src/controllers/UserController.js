@@ -3,11 +3,44 @@ const FollowerService = require("../services/FollowerService");
 const { fileServer } = require("../config/config");
 const { validateRequestQuery } = require("../helpers/validateRequestQuery");
 const validator = require("../helpers/validator");
-const { deleteFile } = require("../services/MulterService");
-const { HTTP200Success, HTTP204Success } = require("../helpers/success");
+const {
+  HTTP200Success,
+  HTTP204Success,
+  HTTP201Success,
+} = require("../helpers/success");
 const { HTTP400Error } = require("../helpers/error");
+const AxiosService = require("../services/AxiosService");
+const JWTService = require("../services/JWTService");
 
 class UserController {
+  static async addUser(req, res, next) {
+    try {
+      const { body } = req;
+      const { value, error } = validator.addUser.validate(body);
+      if (!error) {
+        const { name: displayName, email: emailId } =
+          await AxiosService.getGoogleProfile(value.access_token);
+        let { user, status } = await UserService.findOrCreateUser({
+          displayName,
+          emailId,
+        });
+        const accessToken = JWTService.signAccessToken({ userId: user._id });
+        const data = { user, accessToken };
+        if (status === "FOUND") {
+          const refreshToken = JWTService.signRefreshToken({
+            userId: user._id,
+          });
+          user = await UserService.updateUserById(user._id, { refreshToken });
+          data["user"] = user;
+          return new HTTP200Success("User found", data).sendResponse(res);
+        }
+        return new HTTP201Success("User created", data).sendResponse(res);
+      }
+      throw new HTTP400Error("Invalid user details.");
+    } catch (error) {
+      next(error);
+    }
+  }
   static getProfile(req, res, next) {
     new HTTP200Success("User profile found.", { user: req.user }).sendResponse(
       res

@@ -5,6 +5,9 @@ const axios = require("axios").default;
 
 class ErrorHandler {
   static handleError(err, res) {
+    if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
+      err = new HTTP400Error("Invalid JSON format.");
+    }
     if (err instanceof mongoose.Error || axios.isAxiosError(err)) {
       //TODO: log errors
       err = new HTTP500Error();
