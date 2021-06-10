@@ -59,6 +59,7 @@ class UserService {
               if (isPresent) {
                 throw new HTTP400Error("Username already exists");
               }
+              user["isComplete"] = true;
             }
             return (user[key] = updates[key]);
           })
