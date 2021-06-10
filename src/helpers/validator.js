@@ -34,6 +34,7 @@ const courseValidation = {
   createCourse: Joi.object({
     courseName: types.string.required(),
     platform: types.string.required(),
+    summary: types.string.required(),
     courseURL: types.string.uri().required(),
     domain: types.string.min(2).required(),
     price: types.number,
@@ -42,6 +43,7 @@ const courseValidation = {
   updateCourse: Joi.object({
     courseName: types.string,
     platform: types.string,
+    summary: types.string,
     domain: types.string.min(2),
     courseURL: types.string.uri(),
     price: types.number,

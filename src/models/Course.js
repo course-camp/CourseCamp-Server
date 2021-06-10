@@ -10,6 +10,10 @@ const courseSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    summary: {
+      type: String,
+      required: true,
+    },
     publisher: {
       type: mongoose.Types.ObjectId,
       ref: "User",
