@@ -207,6 +207,24 @@ class UserController {
     }
   }
 
+  static async getRecommended(req, res, next) {
+    try {
+      const user = req.user;
+      const allowedSorts = ["createdAt", "updatedAt"];
+      const options = await validateRequestQuery(req.query, allowedSorts);
+      const recommends = await UserService.getVirtualByPath(
+        user,
+        "recommends",
+        options,
+        "-__v"
+      );
+      new HTTP200Success("User recommended courses.", {
+        recommends,
+      }).sendResponse(res);
+    } catch (error) {
+      next(error);
+    }
+  }
   static async getPublishedCourses(req, res, next) {
     try {
       const user = req.user;
