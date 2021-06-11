@@ -31,6 +31,8 @@ router.get("/me/reviews", auth, UserController.getReviews);
 
 router.get("/me/courses", auth, UserController.getPublishedCourses);
 
+router.get("/me/recommends", auth, UserController.getRecommended);
+
 router.post("/me/avatar", auth, upload, UserController.uploadUserAvatar);
 
 router.delete("/me/avatar", auth, UserController.deleteUserAvatar);
